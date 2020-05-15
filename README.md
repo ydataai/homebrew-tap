@@ -32,9 +32,7 @@ The Github runner is prepared to create all the configuration files in the same 
 The configuration is basically the same provided by Github docs, but instead of use `Runner.Listener` or `./config.sh` you should use `github-runner configure`.
 (basically `./config.sh` script runs `Runner.Listener` under the hood)
 
-Let's give an example:
-
-Assuming that you have followed the github doc [Adding self-hosted runners](https://help.github.com/en/actions/hosting-your-own-runners/adding-self-hosted-runners) and you have the `URL` and the `TOKEN`, run the following replacing the values
+As example, assuming that you have followed the github doc [Adding self-hosted runners](https://help.github.com/en/actions/hosting-your-own-runners/adding-self-hosted-runners) and you have the `URL` and the `TOKEN`, run the following command replacing the values:
 
 ```bash
 github-runner configure --url <URL> --token <TOKEN>
@@ -49,8 +47,16 @@ The formula supports homebrew services so you can easily add and manage github-r
 
 Make sure you [configure](#configuration) the runner before start the service, otherwise it will not work, the service depends on a file created by the configuration (YET).
 
+To start the runner and register it in launchd
+
 ```bash
 brew services start github-runner
+```
+
+To stop the runner and un-register it in launchd
+
+```bash
+brew services stop github-runner
 ```
 
 #### Disclaimer ⚠️
