@@ -15,6 +15,36 @@ class GithubRunner < Formula
     bin.install "github-runner"
   end
 
+  def plist
+    <<~EOS
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+    <plist version="1.0">
+      <dict>
+        <key>WorkingDirectory</key>
+        <string>#{libexec}</string>
+        <key>RunAtLoad</key>
+        <true/>
+        <key>StandardOutPath</key>
+        <string>#{ENV["HOME"]}/Library/Logs/#{plist_name}/stdout.log</string>
+        <key>StandardErrorPath</key>
+        <string>#{ENV["HOME"]}/Library/Logs/#{plist_name}/stderr.log</string>
+        <key>Label</key>
+        <string>#{plist_name}</string>
+        <key>ProgramArguments</key>
+        <array>
+          <string>#{libexec}/bin/runsvc.sh</string>
+        </array>
+        <key>EnvironmentVariables</key>
+        <dict>
+          <key>ACTIONS_RUNNER_SVC</key>
+          <string>1</string>
+        </dict>
+      </dict>
+    </plist>
+    EOS
+  end
+
   test do
     assert_match version.to_s, shell_output("#{bin}/github-runner --version")
   end
