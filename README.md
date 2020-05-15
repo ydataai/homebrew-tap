@@ -43,9 +43,23 @@ github-runner configure --url <URL> --token <TOKEN>
 Follow the indications provided by the tool to configure your runner.
 Those are the same as if you ran `./config.sh` as mentioned by Github.
 
+#### Service
+
+The formula supports homebrew services so you can easily add and manage github-runner through launchd.
+
+Make sure you [configure](#configuration) the runner before start the service, otherwise it will not work, the service depends on a file created by the configuration (YET).
+
+```bash
+brew services start github-runner
+```
+
 #### Disclaimer ⚠️
 
 YData only provides the formula to make it easy to install the runner os macOS environments, it doesn't modify the content of the runner or has any affiliation with the creation of the runner.
+
+## Contributing 🙏
+
+You are more than welcome to submit any kind of contribution, issues, pull requests or just feedback. 🙇‍
 
 # About 👯‍♂️
 
