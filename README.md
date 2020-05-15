@@ -21,10 +21,11 @@ brew install ydataai/tap/github-runner
 
 ### github-runner
 
-This is a formula to install [github actions runner](https://github.com/actions/runner).
+This is a formula to install [github actions runner](https://github.com/actions/runner)
 
-The formula copies the `bin` and `external` folders provided by Github into the `libexec` in the Cellar path created to this formula.
-Instead of adding `Runner.Listener` binary probided by Github to the PATH, it creates a symlink called `github-runner` to this binary and adds it to the PATH, to make it easier and intuitive on how to use the runner.
+The formula copies the `bin` and `external` folders provided by Github into the `libexec` folder in the Cellar path created to this formula.
+Instead of adding `Runner.Listener` binary probided by Github to the binaries folder, it creates a symlink called `github-runner` which is then added to the binaries folder, usually `/usr/local/bin`.
+The Github runner is prepared to create all the configuration files in the same folder where it is installed, which means that all the files will be placed in the `libexec` folder, which from our point of view is not ideal, they should be on an etc folder or in the user home folder, but for now is what we can do.
 
 #### Configuration 🛠
 
