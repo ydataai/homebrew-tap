@@ -6,24 +6,37 @@ class GithubRunner < Formula
   sha256 "d24529d7016b6f281b8c0daa052215381075db377c73cc6221335e13bb9e4a07"
   version "2.169.1"
 
+  depends_on "nvm"
+
   def install
 
+    libexec.install "env.sh"
     libexec.install Dir["bin"]
     libexec.install Dir["externals"]
 
-    ohai "Setting up environment"
-    system "./env.sh"
+    runner = (libexec/"github-runner")
+    runner.atomic_write <<~EOS
+    #!/bin/sh
 
-    ohai "Moving .env and .path"
-    libexec.install ".env"
-    libexec.install ".path"
+    SOURCE="${BASH_SOURCE[0]}"
+    while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+      DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+      SOURCE="$(readlink "$SOURCE")"
+      [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+    done
+    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+    cd $DIR
+
+    sh ./env.sh
+
+    ./bin/Runner.Listener "$@"
+    EOS
+    runner.chmod 0755
 
     ohai "Write plist path to .service file"
     (libexec/".service").write plist_path
 
-    ln_s libexec/"bin/Runner.Listener", "github-runner"
-
-    bin.install "github-runner"
+    bin.install_symlink runner
   end
 
   def caveats
@@ -60,8 +73,6 @@ class GithubRunner < Formula
         <dict>
           <key>ACTIONS_RUNNER_SVC</key>
           <string>1</string>
-          <key>PATH</key>
-          <string>#{ENV["PATH"]}</string>
         </dict>
       </dict>
     </plist>
